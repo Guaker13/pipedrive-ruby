@@ -1,10 +1,6 @@
 require 'helper'
 
 class TestPipedriveDeal < Test::Unit::TestCase
-  def setup
-    Pipedrive.authenticate("some-token")
-  end
-
   should "execute a valid person request" do
     body = {
       "currency" => "EUR",
@@ -13,12 +9,12 @@ class TestPipedriveDeal < Test::Unit::TestCase
       "value" => "37k"
     }
 
-    stub_request(:post, "http://api.pipedrive.com/v1/deals?api_token=some-token").
+    stub_request(:post, "https://api.pipedrive.com/v1/deals?api_token=some-token").
       with(:body => body,
         :headers => {
           'Accept'=>'application/json',
           'Content-Type'=>'application/x-www-form-urlencoded',
-          'User-Agent'=>'Ruby.Pipedrive.Api'
+          'User-Agent'=>'istat24.Pipedrive.Api'
         }).
       to_return(
         :status => 200,
@@ -33,7 +29,7 @@ class TestPipedriveDeal < Test::Unit::TestCase
         }
       )
 
-    deal = ::Pipedrive::Deal.create(body)
+    deal = ::Pipedrive::Deal.create(body.merge(api_token: "some-token"))
 
     assert_equal "Dope Deal", deal.title
     assert_equal 37, deal.value

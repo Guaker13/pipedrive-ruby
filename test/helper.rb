@@ -11,14 +11,12 @@ rescue Bundler::BundlerError => e
   $stderr.puts "Run `bundle install` to install missing gems"
   exit e.status_code
 end
-##require 'test/unit'
+require 'test/unit'
 require 'shoulda'
+require 'pry'
 # require 'mocha/setup'
-##require 'webmock/test_unit'
+require 'webmock/test_unit'
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'pipedrive-ruby'
-
-##class Test::Unit::TestCase
-##end

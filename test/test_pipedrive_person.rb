@@ -1,10 +1,6 @@
 require 'helper'
 
 class TestPipedrivePerson < Test::Unit::TestCase
-  def setup
-    Pipedrive.authenticate("some-token")
-  end
-
   should "execute a valid person request" do
     body = {
       "email"=>["john@dope.org"],
@@ -13,11 +9,11 @@ class TestPipedrivePerson < Test::Unit::TestCase
       "phone"=>["0123456789"]
     }
 
-    stub_request(:post, "http://api.pipedrive.com/v1/persons?api_token=some-token").
+    stub_request(:post, "https://api.pipedrive.com/v1/persons?api_token=some-token").
       with(:body => body, :headers => {
           'Accept'=>'application/json',
           'Content-Type'=>'application/x-www-form-urlencoded',
-          'User-Agent'=>'Ruby.Pipedrive.Api'
+          'User-Agent'=>'istat24.Pipedrive.Api'
         }).
       to_return(
         :status => 200,
@@ -32,7 +28,9 @@ class TestPipedrivePerson < Test::Unit::TestCase
         }
       )
 
-    person = ::Pipedrive::Person.create(body)
+    person = ::Pipedrive::Person.create(
+      body.merge(api_token: 'some-token')
+    )
 
     assert_equal "John Dope", person.name
     assert_equal 404, person.org_id
