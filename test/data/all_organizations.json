@@ -1,0 +1,83 @@
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "company_id": 2518857,
+      "owner_id": {
+        "id": 3782146,
+        "name": "Bram",
+        "email": "bram.jans@gmail.com",
+        "has_pic": true,
+        "pic_hash": "07cd90241ec7e490e75e98551e328887",
+        "active_flag": true,
+        "value": 3782146
+      },
+      "name": "COMPANY",
+      "open_deals_count": 1,
+      "related_open_deals_count": 0,
+      "closed_deals_count": 0,
+      "related_closed_deals_count": 0,
+      "email_messages_count": 0,
+      "people_count": 1,
+      "activities_count": 0,
+      "done_activities_count": 0,
+      "undone_activities_count": 0,
+      "reference_activities_count": 0,
+      "files_count": 0,
+      "notes_count": 0,
+      "followers_count": 1,
+      "won_deals_count": 0,
+      "related_won_deals_count": 0,
+      "lost_deals_count": 0,
+      "related_lost_deals_count": 0,
+      "active_flag": true,
+      "category_id": null,
+      "picture_id": null,
+      "country_code": null,
+      "first_char": "h",
+      "update_time": "2018-01-23 15:16:38",
+      "add_time": "2018-01-23 15:16:37",
+      "visible_to": "3",
+      "next_activity_date": null,
+      "next_activity_time": null,
+      "next_activity_id": null,
+      "last_activity_id": null,
+      "last_activity_date": null,
+      "timeline_last_activity_time": null,
+      "timeline_last_activity_time_by_owner": null,
+      "address": null,
+      "address_subpremise": null,
+      "address_street_number": null,
+      "address_route": null,
+      "address_sublocality": null,
+      "address_locality": null,
+      "address_admin_area_level_1": null,
+      "address_admin_area_level_2": null,
+      "address_country": null,
+      "address_postal_code": null,
+      "address_formatted_address": null,
+      "owner_name": "Bram",
+      "cc_email": "periplo@pipedrivemail.com"
+    }
+  ],
+  "additional_data": {
+    "pagination": {
+      "start": 0,
+      "limit": 100,
+      "more_items_in_collection": false
+    }
+  },
+  "related_objects": {
+    "user": {
+      "3782146": {
+        "id": 3782146,
+        "name": "Bram",
+        "email": "bram.jans@gmail.com",
+        "has_pic": true,
+        "pic_hash": "07cd90241ec7e490e75e98551e328887",
+        "active_flag": true
+      }
+    }
+  }
+}

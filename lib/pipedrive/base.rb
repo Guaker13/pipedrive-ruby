@@ -16,7 +16,6 @@ module Pipedrive
 
     include HTTParty
 
-    base_uri 'https://api.pipedrive.com/v1'
     headers HEADERS
     format :json
 
@@ -50,12 +49,9 @@ module Pipedrive
     # @param [Hash] opts
     # @return [Boolean]
     def update(opts = {})
-      if opts.keys.include?(:api_token)
-        api_token = opts.delete(:api_token)
-        res = put "#{resource_path}/#{id}", :body => opts, query: {api_token: api_token}
-      else
-        res = put "#{resource_path}/#{id}", :body => opts
-      end
+      set_base_uri(options)
+      res = put "#{resource_path}/#{id}", {body: opts}.merge(auth_params(opts))
+
       if res.success?
         res['data'] = Hash[res['data'].map {|k, v| [k.to_sym, v] }]
         @table.merge!(res['data'])
@@ -82,7 +78,8 @@ module Pipedrive
       end
 
       def all(response = nil, options={}, get_absolutely_all=false)
-        res = response || get(resource_path, :query => {}.merge(options))
+        set_base_uri(options)
+        res = response || get(resource_path, auth_params(options))
         if res.ok?
           data = res['data'].nil? ? [] : res['data'].map{|obj| new(obj)}
           if get_absolutely_all && res['additional_data']['pagination'] && res['additional_data']['pagination']['more_items_in_collection']
@@ -95,13 +92,10 @@ module Pipedrive
         end
       end
 
-      def create(options = {} )
-        if options.keys.include?(:api_token)
-          api_token = options.delete(:api_token)
-          res = post resource_path, body: options, query: {api_token: api_token}
-        else
-          res = post resource_path, body: options
-        end
+      def create(options = {})
+        set_base_uri(options)
+        res = post resource_path, {body: options}.merge(auth_params(options))
+
         if res.success?
           res['data'] = options.merge res['data']
           new(res)
@@ -111,13 +105,18 @@ module Pipedrive
       end
 
       def find(id, options={})
-        res = get "#{resource_path}/#{id}", :query => {}.merge(options)
+        set_base_uri(options)
+        res = get "#{resource_path}/#{id}", auth_params(options)
         res.ok? ? new(res) : bad_response(res,id)
       end
 
       def find_by_name(name, options={})
-        res = get "#{resource_path}/find", :query => { :term => name }.merge(options)
-        res.ok? ? new_list(res) : bad_response(res,{:name => name}.merge(options))
+        set_base_uri(options)
+        params = auth_params(options)
+        params[:query] ||= {}
+        params[:query].merge!(term: name)
+        res = get "#{resource_path}/find", params
+        res.ok? ? new_list(res) : bad_response(res,{name: name}.merge(options))
       end
 
       def resource_path
@@ -126,6 +125,36 @@ module Pipedrive
         klass = name.split('::').last
         klass[0] = klass[0].chr.downcase
         klass.end_with?('y') ? "/#{klass.chop}ies" : "/#{klass}s"
+      end
+
+      private
+
+      # Set the `base_uri`. Default is the API v1.
+      def set_base_uri(opts = {})
+        version = opts.delete(:version) || 'v1'
+        if version == 'oauth'
+          base_uri 'https://api-proxy.pipedrive.com'
+        else
+          base_uri 'https://api.pipedrive.com/v1'
+        end
+      end
+
+      def auth_params(options)
+        if options.keys.include?(:api_token)
+          api_token = options.delete(:api_token)
+
+          if oauth_api_version?
+            { headers: { "Authorization" => "Bearer #{api_token}"} }
+          else
+            { query: {api_token: api_token} }
+          end
+        else
+          {}
+        end
+      end
+
+      def oauth_api_version?
+        base_uri == 'https://api-proxy.pipedrive.com'
       end
     end
   end
