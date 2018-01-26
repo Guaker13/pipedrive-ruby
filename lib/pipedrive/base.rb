@@ -114,7 +114,7 @@ module Pipedrive
         set_base_uri(options)
         params = auth_params(options)
         params[:query] ||= {}
-        params[:query].merge!(term: name)
+        params[:query][:term] = name
         res = get "#{resource_path}/find", params
         res.ok? ? new_list(res) : bad_response(res,{name: name}.merge(options))
       end
