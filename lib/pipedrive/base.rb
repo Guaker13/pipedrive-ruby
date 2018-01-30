@@ -115,6 +115,9 @@ module Pipedrive
         params = auth_params(options)
         params[:query] ||= {}
         params[:query][:term] = name
+        if options[:search_by_email]
+          params[:query][:search_by_email] = options[:search_by_email]
+        end
         res = get "#{resource_path}/find", params
         res.ok? ? new_list(res) : bad_response(res,{name: name}.merge(options))
       end
