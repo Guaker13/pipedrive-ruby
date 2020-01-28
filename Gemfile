@@ -7,7 +7,7 @@ gem 'httparty'
 gem 'json', '>= 1.7.7'
 gem 'multi_xml', '>= 0.5.2'
 gem 'webmock'
-gem 'coveralls', :require => false
+gem 'coveralls', '>= 0.8.10' , :require => false
 
 # Add dependencies to develop your gem here.
 # Include everything needed to run rake, tests, features, etc.
